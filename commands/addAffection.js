@@ -12,10 +12,15 @@ module.exports = {
         .addStringOption(option =>
             option.setName('npc')
                 .setDescription('Name of the NPC.')
-                .setRequired(true)),
+                .setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('affection')
+                .setDescription('The amount of affection to start with.')
+                .setRequired(false)),
         async execute(interaction) {
             const player = interaction.options.getString('player');
             const npc = interaction.options.getString('npc');
+            const affection = interaction.options.getInteger('affection') || 0;
             await interaction.deferReply({ ephemeral: true });
 
             affectionData.findOne({name: npc}, async (err, data) => {
@@ -28,10 +33,10 @@ module.exports = {
                             await interaction.editReply(`${player} is already in the affection table for ${npc}.`);
                             return;
                         }
-                        data.affection[player] = 0;
+                        data.affection[player] = affection;
                         data.markModified('affection');
                         await data.save();
-                        await interaction.editReply(`Added ${player} to the affection table for ${npc}.`);
+                        await interaction.editReply(`Added ${player} to the affection table for ${npc} and set their affection to ${affection}.`);
                     } else {
                         await interaction.editReply(`Failed to find data on ${npc}.`);
                     }
