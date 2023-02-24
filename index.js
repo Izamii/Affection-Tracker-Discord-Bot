@@ -3,6 +3,7 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const {keepAlive} = require("./server");
 
 dotenv.config();
 //Connect to MongoDB
@@ -44,3 +45,4 @@ for (const file of commandFiles) {
 }
 
 client.login(process.env.TOKEN);
+keepAlive();
