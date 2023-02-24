@@ -2,8 +2,20 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config();
+//Connect to MongoDB
+mongoose.set('strictQuery', false);
+mongoose.connect(process.env.MONGO_URI);
+
+console.log('Connecting to MongoDB...');
+mongoose.connection.on('connected', () => {
+        console.log('Connected to MongoDB!');
+});
+
+
+//Create a new Discord client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 //Load all events from the events folder
@@ -19,7 +31,6 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
-
 
 //Create a new Collection for commands and load them from the commands folder
 client.commands = new Collection();
