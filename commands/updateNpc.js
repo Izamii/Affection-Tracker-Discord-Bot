@@ -13,14 +13,14 @@ module.exports = {
         .addStringOption(option =>
             option.setName('new-name')
                 .setDescription('The new name of the NPC.')
-                .setRequired(true))
+                .setRequired(false))
         .addBooleanOption(option =>
             option.setName('dateable')
                 .setDescription('Whether or not the NPC is dateable.')
-                .setRequired(true)),
+                .setRequired(false)),
     async execute(interaction) {
         const oldName = interaction.options.getString('old-name');
-        const newName = interaction.options.getString('new-name');
+        const newName = interaction.options.getString('new-name') || oldName;
         const dateable = interaction.options.getBoolean('dateable');
         await interaction.deferReply({ ephemeral: true });
 
@@ -31,11 +31,21 @@ module.exports = {
             } else {
                 if (data) {
                     data.name = newName;
-                    data.dateable = dateable;
+                    if (dateable !== null) {
+                        data.dateable = dateable;
+                    }
                     data.markModified('name');
                     data.markModified('dateable');
                     await data.save();
-                    await interaction.editReply(`Updated ${oldName} to ${newName} in the database and set dateable to ${dateable}.`);
+                    if (dateable !== null && newName !== oldName) {
+                        await interaction.editReply(`Updated ${oldName}\'s name to ${newName} and set dateable to ${dateable} in the database.`);
+                    } else if (dateable !== null) {
+                        await interaction.editReply(`Updated ${newName}\'s dateable property to ${dateable} in the database.`);
+                    } else if (newName !== oldName) {
+                        await interaction.editReply(`Updated ${oldName}\'s name to ${newName} in the database.`);
+                    } else {
+                        await interaction.editReply(`No changes were made to ${oldName}.\n**Dingus.**`);
+                    }
                 } else {
                     await interaction.editReply(`Failed to find data on ${oldName}.`);
                 }
