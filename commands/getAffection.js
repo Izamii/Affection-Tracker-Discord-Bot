@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const affectionData = require('../database/affectionSchema');
-const {getAffectionEmoji} = require('../utils');
+const {getAffectionEmoji, capitalize} = require('../utils');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,8 +15,8 @@ module.exports = {
                 .setDescription('Name of the NPC.')
                 .setRequired(true)),
     async execute(interaction) {
-        const player = interaction.options.getString('player');
-        const npc = interaction.options.getString('npc');
+        const player = capitalize(interaction.options.getString('player'));
+        const npc = capitalize(interaction.options.getString('npc'));
         await interaction.deferReply();
         affectionData.findOne({name: npc}, async (err, data) => {
             if (err) {

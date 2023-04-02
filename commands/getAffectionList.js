@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const affectionData = require('../database/affectionSchema');
+const {capitalize} = require("../utils");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +11,7 @@ module.exports = {
                 .setDescription('Name of the player character.')
                 .setRequired(true)),
     async execute(interaction) {
-        const player = interaction.options.getString('player');
+        const player = capitalize(interaction.options.getString('player'));
         await interaction.deferReply({ephemeral: true});
 
         affectionData.find({}, async (err, data) => {

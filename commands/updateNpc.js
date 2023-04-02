@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const affectionData = require('../database/affectionSchema');
+const {capitalize} = require("../utils");
 
 
 module.exports = {
@@ -19,8 +20,8 @@ module.exports = {
                 .setDescription('Whether or not the NPC is dateable.')
                 .setRequired(false)),
     async execute(interaction) {
-        const oldName = interaction.options.getString('old-name');
-        const newName = interaction.options.getString('new-name') || oldName;
+        const oldName = capitalize(interaction.options.getString('old-name'));
+        const newName = capitalize(interaction.options.getString('new-name')) || oldName;
         const dateable = interaction.options.getBoolean('dateable');
         await interaction.deferReply({ ephemeral: true });
 

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const affectionData = require('../database/affectionSchema');
 const { Types } = require('mongoose');
+const {capitalize} = require("../utils");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
                 .setDescription('Whether or not the NPC is dateable.')
                 .setRequired(true)),
         async execute(interaction) {
-            const npc = interaction.options.getString('npc');
+            const npc = capitalize(interaction.options.getString('npc'));
             const isDateable = interaction.options.getBoolean('is-dateable');
             await interaction.deferReply({ ephemeral: true });
 

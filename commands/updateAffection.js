@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const affectionData = require('../database/affectionSchema');
+const {capitalize} = require("../utils");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,8 +19,8 @@ module.exports = {
                 .setDescription('The affection points to add to the NPC.')
                 .setRequired(true)),
     async execute(interaction) {
-        const player = interaction.options.getString('player');
-        const npc = interaction.options.getString('npc');
+        const player = capitalize(interaction.options.getString('player'));
+        const npc = capitalize(interaction.options.getString('npc'));
         const affectionPoints = interaction.options.getInteger('affection-points');
         await interaction.deferReply({ ephemeral: true });
         const doc = await affectionData.findOne({name: npc});

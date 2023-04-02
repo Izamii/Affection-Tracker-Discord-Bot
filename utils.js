@@ -25,6 +25,11 @@ const getAffectionEmoji = (affection) => {
 
 }
 
+const capitalize = (string) => {
+    const lowerCased = string.toLowerCase();
+    return lowerCased.charAt(0).toUpperCase() + lowerCased.slice(1);
+}
+
 module.exports = {
-    getAffectionEmoji
+    getAffectionEmoji, capitalize
 }
